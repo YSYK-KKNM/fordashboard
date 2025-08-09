@@ -56,31 +56,45 @@ combined=pd.concat([co2, gdp, energy, disasters, temperature], ignore_index=True
 combined['Region']=combined['Country'].apply(lambda x:'Germany' if x=='Germany' else 'Rest of the world')
 combined=combined.dropna().sort_values(by='Country')
 
-
-
 import matplotlib.pyplot as plt
-us=st.button("USA")
-ger=st.button("Germany")
-def plot_data(country):
-    x = np.linspace(0, 8, 16)
-    y = 3 + 4*x/8 + np.random.uniform(0.0, 0.5, len(x))  # 随机噪声加到y值中
-    fig, ax = plt.subplots()
-    ax.plot(x, y)
-    ax.set_title(f'{country} CO2 Emissions Over Time')
-    ax.set_xlabel('Year')
-    ax.set_ylabel('Emissions')
+us = st.button("USA")
+ger = st.button("Germany")
+if us:
+    fig, ax = plt.subplots(figsize=(12, 6))
+    for country in co2['Country'].unique():
+        xf = co2.loc[co2['Country'] == country]
+        ax.plot(xf['Year'], xf['Value'], alpha=1,
+                color='blue' if country == 'USA' else 'gray',
+                linewidth=1.2 if country == 'USA' else 0.8,
+                label='United States' if country == 'USA' else None)
+    ax.set_title('Country $\mathrm{CO}_2$ Emissions per Year (1751–2019)', fontsize=16)
+    ax.set_xlabel('Year', fontsize=12)
+    ax.set_ylabel('Emissions (Metric Tonnes)', fontsize=12)
+    ax.legend(fontsize=12)
+    ax.text(0.785, -0.114, 'Limited to reporting countries', transform=ax.transAxes, fontsize=12)
+    ax.tick_params(labelsize=12)
+    ax.grid(alpha=0.3)
+    plt.tight_layout()
     st.pyplot(fig)
-
-# 判断按钮点击并显示相应的图表
-if usa_button:
-    st.write("You selected USA.")
-    plot_data("USA")
-elif germany_button:
-    st.write("You selected Germany.")
-    plot_data("Germany")
+elif ger:
+    fig, ax = plt.subplots(figsize=(12, 6))
+    for country in co2['Country'].unique():
+        xf = co2.loc[co2['Country'] == country]
+        ax.plot(xf['Year'], xf['Value'], alpha=1,
+                color='blue' if country == 'Germany' else 'gray',
+                linewidth=1.2 if country == 'Germany' else 0.8,
+                label='Germany' if country == 'Germany' else None)
+    ax.set_title('Country $\mathrm{CO}_2$ Emissions per Year (1751–2019)', fontsize=16)
+    ax.set_xlabel('Year', fontsize=12)
+    ax.set_ylabel('Emissions (Metric Tonnes)', fontsize=12)
+    ax.legend(fontsize=12)
+    ax.text(0.785, -0.114, 'Limited to reporting countries', transform=ax.transAxes, fontsize=12)
+    ax.tick_params(labelsize=12)
+    ax.grid(alpha=0.3)
+    plt.tight_layout()
+    st.pyplot(fig)
 else:
     st.write("Please select a country to see the graph.")
-
 
 # usual code for plot
 fig, ax = plt.subplots()

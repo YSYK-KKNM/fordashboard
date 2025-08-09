@@ -11,7 +11,7 @@ col2.metric("Wind","9 mph","-8%")
 col3.metric("Humidity","86%","4%")
 
 import numpy as np
-@st.cache
+@st.cache_data
 def load_data():
     co2 = pd.read_excel('https://raw.githubusercontent.com/YSYK-KKNM/groupproject/main/yearly_co2_emissions_1000_tonnes1.xlsx')
     gdp = pd.read_excel('https://raw.githubusercontent.com/YSYK-KKNM/groupproject/main/GDP_growth.xlsx', skiprows=3)
@@ -20,8 +20,8 @@ def load_data():
     temperature = pd.read_excel('https://raw.githubusercontent.com/YSYK-KKNM/groupproject/main/temperature.xlsx')
     
     return co2, gdp, energy, disaster, temperature
-co2, gdp, energy, disaster, temperature = load_data()
 
+co2, gdp, energy, disaster, temperature = load_data()
 co2= co2.melt(id_vars='country', var_name='Year', value_name='Emissions')
 co2.rename(columns={'country': 'Country'}, inplace=True)
 co2['Year']=pd.to_numeric(co2['Year'])

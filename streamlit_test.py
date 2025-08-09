@@ -1,7 +1,7 @@
 import streamlit as st
 
-st.title("My first dashboard")
-st.write("Hello World!")
+st.title("Project Dashboard")
+st.write("Main outputs of both individual project and group project are demonstrated as follows.")
 
 st.latex(r"Y = \beta_0 + \beta_1X + \varepsilon")
 
@@ -11,13 +11,77 @@ col2.metric("Wind","9 mph","-8%")
 col3.metric("Humidity","86%","4%")
 
 import numpy as np
-seed_for_prng = 78557
-prng = np.random.default_rng(seed_for_prng)  # prng=probabilistic random number generator
-x = np.linspace(0, 8, 16)
-y1 = 3 + 4*x/8 + prng.uniform(0.0, 0.5, len(x))
-y2 = 1 + 2*x/8 + prng.uniform(0.0, 0.5, len(x))
+co2=pd.read_excel('https://raw.githubusercontent.com/YSYK-KKNM/groupproject/main/yearly_co2_emissions_1000_tonnes(1).xlsx')
+gdp=pd.read_excel('https://raw.githubusercontent.com/YSYK-KKNM/groupproject/main/GDP_growth.xlsx',skiprows=3)
+energy=pd.read_excel('https://raw.githubusercontent.com/YSYK-KKNM/groupproject/main/energy.xlsx',skiprows=3)
+disaster=pd.read_excel('https://raw.githubusercontent.com/YSYK-KKNM/groupproject/main/disaster.xlsx')
+temperature=pd.read_excel('https://raw.githubusercontent.com/YSYK-KKNM/groupproject/main/temperature.xlsx')
+
+co2= co2.melt(id_vars='country', var_name='Year', value_name='Emissions')
+co2.rename(columns={'country': 'Country'}, inplace=True)
+co2['Year']=pd.to_numeric(co2['Year'])
+co2['Label']='CO2 Emissions (Metric Tons)'
+co2=co2.rename(columns={'Emissions': 'Value'})
+co2['Indicator']='Emissions'
+co2['Value'] = co2['Value'].apply(lambda x:(float(str(x)[:-1])*1000 if str(x).endswith('k') else
+                                            float(str(x)[:-1])*1000000 if str(x).endswith('M') else None))
+
+gdp=gdp.melt(id_vars=['Country Name','Indicator Name'],var_name='Year',value_name='Value')
+gdp['Year']=gdp['Year'].astype(int)
+gdp=gdp.rename(columns={'Indicator Name':'Label', 'Country Name':'Country'})
+gdp['Indicator']='GDP'
+
+energy=energy.melt(id_vars=['Country Name','Indicator Name'],var_name='Year',value_name='Value')
+energy=energy.rename(columns={'Country Name':'Country','Indicator Name':'Label'})
+energy['Year']=energy['Year'].astype(int)
+energy['Indicator']='Energy'
+
+disaster['Date']=disaster['DisNo.'].astype(str)
+disaster['Year']=disaster['Date'].str[:4].astype(int)
+disaster=disaster.groupby(['Year','Disaster Type']).size().unstack(fill_value=0).reset_index()
+disaster['Disaster']=disaster.drop(columns='Year').sum(axis=1)
+disasters=disaster[['Year', 'Disaster']].copy()
+disasters['Country']='Germany'
+disasters= disasters.melt(id_vars=['Year', 'Country'],var_name='Indicator',value_name='Value')
+disasters['Label']='Number of Disasters'
+
+temperature['Date']=temperature['Date'].astype(str)
+temperature['Year']=temperature['Date'].str[:4].astype(int)
+temperature['Country']='Germany'
+temperature['Indicator']='Temperature'
+temperature['Label']='Temperature (Fahrenheit)'
+temperature=temperature[['Year', 'Country', 'Indicator', 'Value', 'Label']]
+
+combined=pd.concat([co2, gdp, energy, disasters, temperature], ignore_index=True)
+combined['Region']=combined['Country'].apply(lambda x:'Germany' if x=='Germany' else 'Rest of the world')
+combined=combined.dropna().sort_values(by='Country')
+
+
 
 import matplotlib.pyplot as plt
+us=st.button("USA")
+ger=st.button("Germany")
+def plot_data(country):
+    x = np.linspace(0, 8, 16)
+    y = 3 + 4*x/8 + np.random.uniform(0.0, 0.5, len(x))  # 随机噪声加到y值中
+    fig, ax = plt.subplots()
+    ax.plot(x, y)
+    ax.set_title(f'{country} CO2 Emissions Over Time')
+    ax.set_xlabel('Year')
+    ax.set_ylabel('Emissions')
+    st.pyplot(fig)
+
+# 判断按钮点击并显示相应的图表
+if usa_button:
+    st.write("You selected USA.")
+    plot_data("USA")
+elif germany_button:
+    st.write("You selected Germany.")
+    plot_data("Germany")
+else:
+    st.write("Please select a country to see the graph.")
+
+
 # usual code for plot
 fig, ax = plt.subplots()
 ax.fill_between(x, y1, y2, alpha=.5, linewidth=0)

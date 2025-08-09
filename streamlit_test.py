@@ -1,5 +1,6 @@
 import streamlit as st
 import pandas as pd
+import openpyxl
 st.title("Project Dashboard")
 st.write("Main outputs of both individual project and group project are demonstrated as follows.")
 

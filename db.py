@@ -147,7 +147,7 @@ if "gdp_growth" not in gx.columns and "value" in gx.columns:
 common_countries = sorted(set(em.get("country", pd.Series(dtype=str))).intersection(
     set(tp.get("country", pd.Series(dtype=str))).intersection(
         set(gx.get("country", pd.Series(dtype=str)))
-))
+)))
 
 default_country = common_countries[0] if common_countries else None
 country = st.sidebar.selectbox("Country", options=common_countries or ["(no country)"] , index=0)

@@ -11,7 +11,7 @@ col2.metric("Wind","9 mph","-8%")
 col3.metric("Humidity","86%","4%")
 
 import numpy as np
-co2=pd.read_excel('https://raw.githubusercontent.com/YSYK-KKNM/groupproject/main/yearly_co2_emissions_1000_tonnes(1).xlsx')
+co2=pd.read_excel('https://raw.githubusercontent.com/YSYK-KKNM/groupproject/main/yearly_co2_emissions_1000_tonnes1.xlsx')
 gdp=pd.read_excel('https://raw.githubusercontent.com/YSYK-KKNM/groupproject/main/GDP_growth.xlsx',skiprows=3)
 energy=pd.read_excel('https://raw.githubusercontent.com/YSYK-KKNM/groupproject/main/energy.xlsx',skiprows=3)
 disaster=pd.read_excel('https://raw.githubusercontent.com/YSYK-KKNM/groupproject/main/disaster.xlsx')

@@ -65,6 +65,25 @@ combined=combined.dropna().sort_values(by='Country')
 import matplotlib.pyplot as plt
 us = st.button("USA")
 ger = st.button("Germany")
+
+if not us and not ger:
+    fig, ax = plt.subplots(figsize=(12, 6))
+    for country in co2['Country'].unique():
+        xf = co2.loc[co2['Country'] == country]
+        ax.plot(xf['Year'], xf['Value'], alpha=1,
+                color='blue' if country == 'USA' else 'gray',
+                linewidth=1.2 if country == 'USA' else 0.8,
+                label='United States' if country == 'USA' else None)
+    ax.set_title('Country $\mathrm{CO}_2$ Emissions per Year (1751–2019)', fontsize=16)
+    ax.set_xlabel('Year', fontsize=12)
+    ax.set_ylabel('Emissions (Metric Tonnes)', fontsize=12)
+    ax.legend(fontsize=12)
+    ax.text(0.785, -0.114, 'Limited to reporting countries', transform=ax.transAxes, fontsize=12)
+    ax.tick_params(labelsize=12)
+    ax.grid(alpha=0.3)
+    plt.tight_layout()
+    st.pyplot(fig)
+                
 if us:
     fig, ax = plt.subplots(figsize=(12, 6))
     for country in co2['Country'].unique():

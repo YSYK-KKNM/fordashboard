@@ -1,5 +1,5 @@
 import streamlit as st
-
+import pandas as pd
 st.title("Project Dashboard")
 st.write("Main outputs of both individual project and group project are demonstrated as follows.")
 

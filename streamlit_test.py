@@ -87,8 +87,7 @@ if b1:
     
     us1 = st.button("USA", key='us1')
     ger1 = st.button("Germany", key='ger1')
-    
-    if not us1 and not ger1:
+    if us1:
         fig, ax = plt.subplots(figsize=(12, 6))
         for country in co2['Country'].unique():
             xf = co2.loc[co2['Country'] == country]
@@ -105,25 +104,7 @@ if b1:
         ax.grid(alpha=0.3)
         plt.tight_layout()
         st.pyplot(fig)
-                    
-    elif us1:
-        fig, ax = plt.subplots(figsize=(12, 6))
-        for country in co2['Country'].unique():
-            xf = co2.loc[co2['Country'] == country]
-            ax.plot(xf['Year'], xf['Value'], alpha=1,
-                    color='blue' if country == 'USA' else 'gray',
-                    linewidth=1.2 if country == 'USA' else 0.8,
-                    label='United States' if country == 'USA' else None)
-        ax.set_title('Country $\mathrm{CO}_2$ Emissions per Year (1751–2019)', fontsize=16)
-        ax.set_xlabel('Year', fontsize=12)
-        ax.set_ylabel('Emissions (Metric Tonnes)', fontsize=12)
-        ax.legend(fontsize=12)
-        ax.text(0.785, -0.114, 'Limited to reporting countries', transform=ax.transAxes, fontsize=12)
-        ax.tick_params(labelsize=12)
-        ax.grid(alpha=0.3)
-        plt.tight_layout()
-        st.pyplot(fig)
-    elif ger1:
+     elif ger1:
         fig, ax = plt.subplots(figsize=(12, 6))
         for country in co2['Country'].unique():
             xf = co2.loc[co2['Country'] == country]
@@ -140,7 +121,8 @@ if b1:
         ax.grid(alpha=0.3)
         plt.tight_layout()
         st.pyplot(fig)
-    else: None
+     else: 
+        st.write("Please pick a country first")
 elif b2:
     ##2
     st.markdown('<p style="font-size:20px; font-family:\"Times New Roman\", serif; color:#333333e;">2. Top 10 Emissions-producing Countries (1900-2019)</p>', unsafe_allow_html=True)
@@ -186,10 +168,7 @@ elif b4:
     st.markdown('<p style="font-size:20px; font-family:\"Times New Roman\", serif; color:#333333e;">4. Facet Figure: Distributions of Indicators by Year and Value</p>', unsafe_allow_html=True)
     us2 = st.button("USA",key='us2')
     ger2 = st.button("Germany",key='ger2')
-    
-    if not us2 and not ger2:
-        st.write('Please Select a Country First.')
-    elif us2:
+    if us2:
         fig,axes=plt.subplots(3,2, figsize=(14, 9), sharex='col',sharey='row')
         indicators=['Emissions', 'Energy', 'GDP']
         regions=['Rest of the world', 'USA']
@@ -213,36 +192,39 @@ elif b4:
                     ax.set_ylabel(indicator, fontsize=12)
                 if i==2:
                     ax.set_xlabel('Year', fontsize=11)        
-        plt.tight_layout(rect=[0, 0, 1, 0.97])
-        plt.suptitle('Distribution of Indicators by Year and Value', fontsize=16)
-        st.pyplot(fig)
-    elif ger2:
-        fig,axes=plt.subplots(3,2, figsize=(14, 9), sharex='col',sharey='row')
-        indicators=['Emissions', 'Energy', 'GDP']
-        regions=['Rest of the world', 'Germany']
-        xl=(1750, 2025)
-        yl=[]
-        for indicator in indicators:
-            lm=combined2[combined2['Indicator']==indicator]
-            yl.append((lm['Value'].min(), lm['Value'].max()))
-        for i, indicator in enumerate(indicators):
-            for j, region in enumerate(regions):
-                ax=axes[i, j]
-                zf=combined2[(combined2['Indicator']==indicator)&(combined2['Region']==region)]
-                for country in zf['Country'].unique():
-                    wf=zf[zf['Country']==country]
-                    sns.lineplot(data=wf, x='Year', y='Value', ax=ax,color='black', linewidth=0.8, alpha=0.7)
-                ax.set_xlim(xl)
-                ax.set_ylim(yl[i]) 
-                if i==0:
-                    ax.set_title(region, fontsize=14,)
-                if j==0:
-                    ax.set_ylabel(indicator, fontsize=12)
-                if i==2:
-                    ax.set_xlabel("Year", fontsize=11)        
-        plt.tight_layout(rect=[0, 0, 1, 0.97])
-        plt.suptitle("Distribution of Indicators by Year and Value", fontsize=16)
-        st.pyplot(fig)
+          plt.tight_layout(rect=[0, 0, 1, 0.97])
+          plt.suptitle('Distribution of Indicators by Year and Value', fontsize=16)
+          st.pyplot(fig)
+      elif ger2:
+          fig,axes=plt.subplots(3,2, figsize=(14, 9), sharex='col',sharey='row')
+          indicators=['Emissions', 'Energy', 'GDP']
+          regions=['Rest of the world', 'Germany']
+          xl=(1750, 2025)
+          yl=[]
+          for indicator in indicators:
+              lm=combined2[combined2['Indicator']==indicator]
+              yl.append((lm['Value'].min(), lm['Value'].max()))
+              for i, indicator in enumerate(indicators):
+                  for j, region in enumerate(regions):
+                      ax=axes[i, j]
+                      zf=combined2[(combined2['Indicator']==indicator)&(combined2['Region']==region)]
+                      for country in zf['Country'].unique():
+                          wf=zf[zf['Country']==country]
+                          sns.lineplot(data=wf, x='Year', y='Value', ax=ax,color='black', linewidth=0.8, alpha=0.7)
+                      ax.set_xlim(xl)
+                      ax.set_ylim(yl[i]) 
+                      if i==0:
+                          ax.set_title(region, fontsize=14,)
+                      if j==0:
+                          ax.set_ylabel(indicator, fontsize=12)
+                      if i==2:
+                          ax.set_xlabel("Year", fontsize=11)        
+            plt.tight_layout(rect=[0, 0, 1, 0.97])
+            plt.suptitle("Distribution of Indicators by Year and Value", fontsize=16)
+            st.pyplot(fig)
+        else:
+            st.write('Please Select a Country First.')
+              
 elif b5: 
     st.markdown('<p style="font-size:20px; font-family:\"Times New Roman\", serif; color:#333333e;">Relationship Between Emissions and Temperature for USA</p>', unsafe_allow_html=True)
     st.write("The Mean and Standard Deviation of CO₂ Emissions and Temperature")
@@ -254,21 +236,25 @@ elif b5:
     st.write("The Correlation Coefficient for CO₂ Emissions and Temperature")
     col5=st.columns(1)
     col5[0].metric("Emissions&Temperature","0.4712")
-    us=combined1[(combined1['Country']=='United States')&(combined1['Year'].between(1980,2014))&(combined1['Indicator'].isin(['Emissions', 'Temperature']))]
+    us=combined1[(combined1['Country']=='USA')&(combined1['Year'].between(1900,2024))&(combined1['Indicator'].isin(['Emissions', 'Temperature']))]
     li_us=us.pivot(index='Year', columns='Indicator', values='Value').reset_index()
     df=li_us.copy()
     scaler=StandardScaler()
     df[['sc_emissions', 'sc_temperature']]=scaler.fit_transform(df[['Emissions', 'Temperature']])
-    X=df['sc_emissions']
+    x=df['sc_emissions']
     y=df['sc_temperature']
-    X=sm.add_constant(X)
-    model=sm.OLS(y, X)
+    tocl=pd.concat([x,y],axis=1)
+    clean=tocl.dropna()
+    x=clean['sc_emissions']
+    y=clean['sc_temperature']
+    x=sm.add_constant(x)
+    model=sm.OLS(y, x)
     results=model.fit()
-    y_sc=results.predict(X)
+    y_sc=results.predict(x)
     plt.figure(figsize=(12, 6))
-    plt.scatter(df['sc_emissions'], df['sc_temperature'], label='Standardized CO₂ Emissions', color='black', alpha=0.8)
-    plt.plot(df['sc_emissions'], y_sc, color='blue', linewidth=2)
-    plt.title('US $\mathrm{CO}_2$ Emissions and Temperature (1980-2014)', fontsize=16)
+    plt.scatter(x['sc_emissions'], y, label='Standardized CO₂ Emissions', color='black', alpha=0.8)
+    plt.plot(x['sc_emissions'], y_sc, color='blue', linewidth=2)
+    plt.title('Germany $\mathrm{CO}_2$ Emissions and Temperature (1980-2024)', fontsize=16)
     plt.xlabel('Scaled Emissions (Metric Tonnes)', fontsize=12)
     plt.ylabel('Scaled Temperature (Fahrenheit)', fontsize=12)
     plt.grid(alpha=0.3)

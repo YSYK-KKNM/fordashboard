@@ -253,4 +253,4 @@ elif b6:
     col5,col6=st.columns(2)
     col5.metric("Emissions&Temperature","0.2013")
     col6.metric("Emissions&Natural Disasters","0.0438")
-else None
+else: None

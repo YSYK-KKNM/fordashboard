@@ -6,3 +6,5 @@ altair
 plotly
 openpyxl
 seaborn
+scikit-learn
+statsmodels

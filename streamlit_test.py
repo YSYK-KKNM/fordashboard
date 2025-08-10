@@ -192,38 +192,38 @@ elif b4:
                     ax.set_ylabel(indicator, fontsize=12)
                 if i==2:
                     ax.set_xlabel('Year', fontsize=11)        
-          plt.tight_layout(rect=[0, 0, 1, 0.97])
-          plt.suptitle('Distribution of Indicators by Year and Value', fontsize=16)
-          st.pyplot(fig)
-      elif ger2:
-          fig,axes=plt.subplots(3,2, figsize=(14, 9), sharex='col',sharey='row')
-          indicators=['Emissions', 'Energy', 'GDP']
-          regions=['Rest of the world', 'Germany']
-          xl=(1750, 2025)
-          yl=[]
-          for indicator in indicators:
-              lm=combined2[combined2['Indicator']==indicator]
-              yl.append((lm['Value'].min(), lm['Value'].max()))
-              for i, indicator in enumerate(indicators):
-                  for j, region in enumerate(regions):
-                      ax=axes[i, j]
-                      zf=combined2[(combined2['Indicator']==indicator)&(combined2['Region']==region)]
-                      for country in zf['Country'].unique():
-                          wf=zf[zf['Country']==country]
-                          sns.lineplot(data=wf, x='Year', y='Value', ax=ax,color='black', linewidth=0.8, alpha=0.7)
-                      ax.set_xlim(xl)
-                      ax.set_ylim(yl[i]) 
-                      if i==0:
-                          ax.set_title(region, fontsize=14,)
-                      if j==0:
-                          ax.set_ylabel(indicator, fontsize=12)
-                      if i==2:
-                          ax.set_xlabel("Year", fontsize=11)        
-            plt.tight_layout(rect=[0, 0, 1, 0.97])
-            plt.suptitle("Distribution of Indicators by Year and Value", fontsize=16)
-            st.pyplot(fig)
-        else:
-            st.write('Please Select a Country First.')
+        plt.tight_layout(rect=[0, 0, 1, 0.97])
+        plt.suptitle('Distribution of Indicators by Year and Value', fontsize=16)
+        st.pyplot(fig)
+    elif ger2:
+        fig,axes=plt.subplots(3,2, figsize=(14, 9), sharex='col',sharey='row')
+        indicators=['Emissions', 'Energy', 'GDP']
+        regions=['Rest of the world', 'Germany']
+        xl=(1750, 2025)
+        yl=[]
+        for indicator in indicators:
+            lm=combined2[combined2['Indicator']==indicator]
+            yl.append((lm['Value'].min(), lm['Value'].max()))
+            for i, indicator in enumerate(indicators):
+                for j, region in enumerate(regions):
+                    ax=axes[i, j]
+                    zf=combined2[(combined2['Indicator']==indicator)&(combined2['Region']==region)]
+                    for country in zf['Country'].unique():
+                        wf=zf[zf['Country']==country]
+                        sns.lineplot(data=wf, x='Year', y='Value', ax=ax,color='black', linewidth=0.8, alpha=0.7)
+                    ax.set_xlim(xl)
+                    ax.set_ylim(yl[i]) 
+                    if i==0:
+                        ax.set_title(region, fontsize=14,)
+                    if j==0:
+                        ax.set_ylabel(indicator, fontsize=12)
+                    if i==2:
+                        ax.set_xlabel("Year", fontsize=11)        
+        plt.tight_layout(rect=[0, 0, 1, 0.97])
+        plt.suptitle("Distribution of Indicators by Year and Value", fontsize=16)
+        st.pyplot(fig)
+    else:
+        st.write('Please Select a Country First.')
               
 elif b5: 
     st.markdown('<p style="font-size:20px; font-family:\"Times New Roman\", serif; color:#333333e;">Relationship Between Emissions and Temperature for USA</p>', unsafe_allow_html=True)

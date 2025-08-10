@@ -253,8 +253,8 @@ elif b5:
     col4.metric("Temperature SD","0.89°F")
     st.write("The Correlation Coefficient for CO₂ Emissions and Temperature")
     col5=st.columns(1)
-    col5.metric("Emissions&Temperature","0.4712")
-    us=combined[(combined['Country']=='United States')&(combined['Year'].between(1980,2014))&(combined['Indicator'].isin(['Emissions', 'Temperature']))]
+    col5[0].metric("Emissions&Temperature","0.4712")
+    us=combined1[(combined1['Country']=='United States')&(combined1['Year'].between(1980,2014))&(combined1['Indicator'].isin(['Emissions', 'Temperature']))]
     li_us=us.pivot(index='Year', columns='Indicator', values='Value').reset_index()
     df=li_us.copy()
     scaler=StandardScaler()
@@ -285,7 +285,7 @@ elif b6:
     col5,col6=st.columns(2)
     col5.metric("Emissions&Temperature","0.2013")
     col6.metric("Emissions&Natural Disasters","0.0438")
-    ger=combined[(combined['Country']=='Germany')&(combined['Year'].between(1900,2024))&(combined['Indicator'].isin(['Emissions', 'Temperature']))]
+    ger=combined2[(combined2['Country']=='Germany')&(combined2['Year'].between(1900,2024))&(combined2['Indicator'].isin(['Emissions', 'Temperature']))]
     li_ger=ger.pivot(index='Year', columns='Indicator', values='Value').reset_index()
     df=li_ger.copy()
     scaler=StandardScaler()

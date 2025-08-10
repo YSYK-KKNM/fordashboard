@@ -115,3 +115,33 @@ elif ger:
     st.pyplot(fig)
 else:
     st.write("Please select a country to see the graph.")
+##2
+st.markdown('<p style="font-size:20px; font-family:\"Times New Roman\", serif; color:#333333e;">2. Top 10 Emissions-producing Countries (1900-2019)</p>', unsafe_allow_html=True)
+d2019=co2[co2['Year']==2019].copy()
+d2019['rank']=d2019['Value'].rank(ascending=False)
+etop=co2[(co2['Country'].isin(top['Country']))&(co2['Year']>=1900)].copy()
+import matplotlib.cm as cm
+cns=etop['Country'].unique()
+colors=cm.viridis(np.linspace(0,1,len(cns)))             
+fig,ax=plt.subplots(figsize=(12,6))
+for i,country in enumerate(cns):
+    yf=etop.loc[etop['Country']==country]
+    ax.plot(yf['Year'],yf['Value'],color=colors[i],linewidth=1,alpha=1,label=country)
+    ax.text(yf['Year'].iloc[-1]-3.5, yf['Value'].iloc[-1],country, fontsize=12,color=colors[i])
+##add title,labels,legends for the plot    
+ax.set_title('Top 10 Emissions-producing Countries (1900-2019)',fontsize=16)
+ax.set_xlabel('Year',fontsize=12)
+ax.set_ylabel('Emissions (Metric Tonnes)',fontsize=12)
+ax.text(0.001,0.96, 'Ordered by Emissions Produced in 2019',transform=ax.transAxes,fontsize=12)
+ax.tick_params(labelsize=12)
+ax.grid(alpha=0.3)
+plt.tight_layout()
+st.pyplot(fig)
+
+
+
+
+
+
+
+top=d2019[d2019['rank']<=10]

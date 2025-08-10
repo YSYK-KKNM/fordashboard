@@ -61,8 +61,8 @@ combined2['Region']=combined2['Country'].apply(lambda x:'Germany' if x=='Germany
 combined2=combined2.dropna().sort_values(by='Country')
 
 import matplotlib.pyplot as plt
-us = st.button("USA")
-ger = st.button("Germany")
+us1 = st.button("USA", key='us1')
+ger1 = st.button("Germany", key='ger1')
 
 if not us and not ger:
     fig, ax = plt.subplots(figsize=(12, 6))
@@ -162,8 +162,8 @@ st.pyplot(fig)
 
 ##4
 st.markdown('<p style="font-size:20px; font-family:\"Times New Roman\", serif; color:#333333e;">4. Facet Figure: Distributions of Indicators by Year and Value</p>', unsafe_allow_html=True)
-us = st.button("USA")
-ger = st.button("Germany")
+us2 = st.button("USA",key='us2')
+ger2 = st.button("Germany",key='ger2')
 
 if not us and not ger:
     st.write('Please Select a Country First.')

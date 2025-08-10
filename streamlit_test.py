@@ -64,7 +64,7 @@ import matplotlib.pyplot as plt
 us1 = st.button("USA", key='us1')
 ger1 = st.button("Germany", key='ger1')
 
-if not us and not ger:
+if not us1 and not ger1:
     fig, ax = plt.subplots(figsize=(12, 6))
     for country in co2['Country'].unique():
         xf = co2.loc[co2['Country'] == country]
@@ -82,7 +82,7 @@ if not us and not ger:
     plt.tight_layout()
     st.pyplot(fig)
                 
-elif us:
+elif us1:
     fig, ax = plt.subplots(figsize=(12, 6))
     for country in co2['Country'].unique():
         xf = co2.loc[co2['Country'] == country]
@@ -99,7 +99,7 @@ elif us:
     ax.grid(alpha=0.3)
     plt.tight_layout()
     st.pyplot(fig)
-elif ger:
+elif ger1:
     fig, ax = plt.subplots(figsize=(12, 6))
     for country in co2['Country'].unique():
         xf = co2.loc[co2['Country'] == country]
@@ -165,9 +165,9 @@ st.markdown('<p style="font-size:20px; font-family:\"Times New Roman\", serif; c
 us2 = st.button("USA",key='us2')
 ger2 = st.button("Germany",key='ger2')
 
-if not us and not ger:
+if not us2 and not ger2:
     st.write('Please Select a Country First.')
-elif us:
+elif us2:
     fig,axes=plt.subplots(3,2, figsize=(14, 9), sharex='col',sharey='row')
     indicators=['Emissions', 'Energy', 'GDP']
     regions=['Rest of the world', 'United States']
@@ -194,7 +194,7 @@ elif us:
     plt.tight_layout(rect=[0, 0, 1, 0.97])
     plt.suptitle('Distribution of Indicators by Year and Value', fontsize=16)
     st.pyplot(fig)
-elif ger:
+elif ger2:
     fig,axes=plt.subplots(3,2, figsize=(14, 9), sharex='col',sharey='row')
     indicators=['Emissions', 'Energy', 'GDP']
     regions=['Rest of the world', 'Germany']

@@ -85,12 +85,13 @@ st.markdown("""
 if b1:
     st.markdown('<p style="font-size:20px; font-family:\"Times New Roman\", serif; color:#333333e;">1. Country CO₂ Emissions per Year Over Time</p>', unsafe_allow_html=True)
     st.markdown('<p style="font-size:16px; font-family:\"Times New Roman\", serif; color:#333333; line-height:1.6;">You may select a country to highlight by pressing the button</p>', unsafe_allow_html=True)
-    
-    us1 = st.button("USA", key='us1')
-    ger1 = st.button("Germany", key='ger1')
 
-    # 单独判断USA按钮的点击
-    if us1:
+    co= st.radio(
+        "Select a country to view CO₂ Emissions per Year",
+        ('USA', 'Germany')
+    )
+    
+    if co== 'USA':
         fig, ax = plt.subplots(figsize=(12, 6))
         for country in co2['Country'].unique():
             xf = co2.loc[co2['Country'] == country]
@@ -107,7 +108,8 @@ if b1:
         ax.grid(alpha=0.3)
         plt.tight_layout()
         st.pyplot(fig)
-    if ger1:
+    
+    elif co == 'Germany':
         fig, ax = plt.subplots(figsize=(12, 6))
         for country in co2['Country'].unique():
             xf = co2.loc[co2['Country'] == country]
@@ -124,8 +126,7 @@ if b1:
         ax.grid(alpha=0.3)
         plt.tight_layout()
         st.pyplot(fig)
-    if not us1 and not ger1:
-        st.write("Please pick a country first")
+    else: None
 
 
 elif b2:
@@ -166,9 +167,8 @@ elif b3:
 
 elif b4:
     st.markdown('<p style="font-size:20px; font-family:\"Times New Roman\", serif; color:#333333e;">4. Facet Figure: Distributions of Indicators by Year and Value</p>', unsafe_allow_html=True)
-    us2 = st.button("USA", key='us2')
-    ger2 = st.button("Germany", key='ger2')
-    if us2:
+    co=st.radio("Select a country", ("USA", "Germany"))
+    if co=="USA":
         fig, axes = plt.subplots(3, 2, figsize=(14, 9), sharex='col', sharey='row')
         indicators = ['Emissions', 'Energy', 'GDP']
         regions = ['Rest of the world', 'USA']
@@ -193,9 +193,10 @@ elif b4:
                 if i == 2:
                     ax.set_xlabel('Year', fontsize=11)
         plt.tight_layout(rect=[0, 0, 1, 0.97])
-        plt.suptitle('Distribution of Indicators by Year and Value', fontsize=16)
+        plt.suptitle('Distribution of Indicators by Year and Value (USA)', fontsize=16)
         st.pyplot(fig)
-    if ger2:
+    
+    elif co=="Germany":
         fig, axes = plt.subplots(3, 2, figsize=(14, 9), sharex='col', sharey='row')
         indicators = ['Emissions', 'Energy', 'GDP']
         regions = ['Rest of the world', 'Germany']
@@ -220,10 +221,11 @@ elif b4:
                 if i == 2:
                     ax.set_xlabel("Year", fontsize=11)
         plt.tight_layout(rect=[0, 0, 1, 0.97])
-        plt.suptitle("Distribution of Indicators by Year and Value", fontsize=16)
+        plt.suptitle("Distribution of Indicators by Year and Value (Germany)", fontsize=16)
         st.pyplot(fig)
-    if not us2 and not ger2:
-        st.write('Please Select a Country First.')
+    else:
+        None
+
 
 elif b5:
     st.markdown('<p style="font-size:20px; font-family:\"Times New Roman\", serif; color:#333333e;">Relationship Between Emissions and Temperature for USA</p>', unsafe_allow_html=True)

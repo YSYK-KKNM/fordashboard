@@ -60,6 +60,7 @@ combined2=pd.concat([co2, gdp, energy, disasters, temperature], ignore_index=Tru
 combined2['Region']=combined2['Country'].apply(lambda x:'Germany' if x=='Germany' else 'Rest of the world')
 combined2=combined2.dropna().sort_values(by='Country')
 
+##1
 import matplotlib.pyplot as plt
 us1 = st.button("USA", key='us1')
 ger1 = st.button("Germany", key='ger1')
@@ -170,7 +171,7 @@ if not us2 and not ger2:
 elif us2:
     fig,axes=plt.subplots(3,2, figsize=(14, 9), sharex='col',sharey='row')
     indicators=['Emissions', 'Energy', 'GDP']
-    regions=['Rest of the world', 'United States']
+    regions=['Rest of the world', 'USA']
     xl=(1750, 2025)
     yl=[]
     for indicator in indicators:

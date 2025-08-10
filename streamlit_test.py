@@ -10,7 +10,10 @@ col1, col2, col3 = st.columns(3)
 col1.metric("Temperature","70 °F","1.2 °F")
 col2.metric("Wind","9 mph","-8%")
 col3.metric("Humidity","86%","4%")
-
+st.markdown(
+"<p class='big-title'>1. Country </p> $\mathrm{CO}_2$ Emissions per Year Over Time",
+unsafe_allow_html=True
+)
 st.markdown('<p style="font-size:20px; font-family:\"Times New Roman\", serif; color:#333333e;">1. Country $\\mathrm{CO}_2$ Emissions per Year Over Time</p>', unsafe_allow_html=True)
 st.markdown('<p style="font-size:16px; font-family:\"Times New Roman\", serif; color:#333333; line-height:1.6;">You may select a country to highlight by pressing the button</p>', unsafe_allow_html=True)
 import numpy as np

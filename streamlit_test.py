@@ -62,17 +62,13 @@ st.write("Main outputs of both individual project and group project are demonstr
 st.sidebar.title("Navigation")
 b1 = st.sidebar.button("Variations of CO₂ Emissions Over Time")
 b2 = st.sidebar.button("Relationship Between CO₂ Emissions and Temperature or Natural Disasters")
-st.markdown(
-    """
-<style>
-.sidebar .sidebar-content {
-    background-image: linear-gradient(#2e7bcf,#2e7bcf);
-    color: "#FFA421";
-}
-</style>
-""",
-    unsafe_allow_html=True,
-)
+st.markdown("""
+    <style>
+        .css-1lcbk24 {
+            background-color: red;
+        }
+    </style>
+    """, unsafe_allow_html=True)
 if b1:
     ##1
     st.markdown('<p style="font-size:20px; font-family:\"Times New Roman\", serif; color:#333333e;">1. Country CO₂ Emissions per Year Over Time</p>', unsafe_allow_html=True)

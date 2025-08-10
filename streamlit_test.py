@@ -89,6 +89,7 @@ if b1:
     us1 = st.button("USA", key='us1')
     ger1 = st.button("Germany", key='ger1')
 
+    # 单独判断USA按钮的点击
     if us1:
         fig, ax = plt.subplots(figsize=(12, 6))
         for country in co2['Country'].unique():
@@ -106,8 +107,7 @@ if b1:
         ax.grid(alpha=0.3)
         plt.tight_layout()
         st.pyplot(fig)
-
-    elif ger1:
+    if ger1:
         fig, ax = plt.subplots(figsize=(12, 6))
         for country in co2['Country'].unique():
             xf = co2.loc[co2['Country'] == country]
@@ -124,9 +124,9 @@ if b1:
         ax.grid(alpha=0.3)
         plt.tight_layout()
         st.pyplot(fig)
-
-    else:
+    if not us1 and not ger1:
         st.write("Please pick a country first")
+
 
 elif b2:
     st.markdown('<p style="font-size:20px; font-family:\"Times New Roman\", serif; color:#333333e;">2. Top 10 Emissions-producing Countries (1900-2019)</p>', unsafe_allow_html=True)
@@ -195,8 +195,7 @@ elif b4:
         plt.tight_layout(rect=[0, 0, 1, 0.97])
         plt.suptitle('Distribution of Indicators by Year and Value', fontsize=16)
         st.pyplot(fig)
-
-    elif ger2:
+    if ger2:
         fig, axes = plt.subplots(3, 2, figsize=(14, 9), sharex='col', sharey='row')
         indicators = ['Emissions', 'Energy', 'GDP']
         regions = ['Rest of the world', 'Germany']
@@ -223,7 +222,7 @@ elif b4:
         plt.tight_layout(rect=[0, 0, 1, 0.97])
         plt.suptitle("Distribution of Indicators by Year and Value", fontsize=16)
         st.pyplot(fig)
-    else:
+    if not us2 and not ger2:
         st.write('Please Select a Country First.')
 
 elif b5:

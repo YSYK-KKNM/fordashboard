@@ -6,6 +6,7 @@ import matplotlib.cm as cm
 import numpy as np
 from sklearn.preprocessing import StandardScaler
 import statsmodels.api as sm
+import seaborn as sns
 
 @st.cache_data
 def load_data():
@@ -154,7 +155,6 @@ elif b3:
     etop = etop.merge(tp, on='Country', how='left')
     etop.sort_values(['rank', 'Year'], inplace=True)
     mapdata = etop.pivot(index='Country', columns='Year', values='loge')
-    import seaborn as sns
     fig, ax = plt.subplots(figsize=(12, 6))
     sns.heatmap(mapdata, cmap='viridis', cbar_kws={'label': 'Ln($\mathrm{CO}_2$ Emissions)'}, xticklabels=5)
     ax.text(0.24, 1.08, "Top 10 $\mathrm{CO}_2$ Emission-producing Countries", fontsize=16, transform=ax.transAxes)

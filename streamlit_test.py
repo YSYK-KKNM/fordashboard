@@ -59,6 +59,9 @@ combined2=combined2.dropna().sort_values(by='Country')
 
 st.title("Project Dashboard")
 st.write("Main outputs of both individual project and group project are demonstrated as follows.")
+st.sidebar.title("Navigation")
+b1 = st.sidebar.button("Variations of CO₂ Emissions Over Time")
+b2 = st.sidebar.button("Relationship Between CO₂ Emissions and Temperature or Natural Disasters")
 st.markdown(
     """
 <style>
@@ -70,9 +73,6 @@ st.markdown(
 """,
     unsafe_allow_html=True,
 )
-st.sidebar.title("Navigation")
-b1 = st.sidebar.button("Variations of CO₂ Emissions Over Time")
-b2 = st.sidebar.button("Relationship Between CO₂ Emissions and Temperature or Natural Disasters")
 if b1:
     ##1
     st.markdown('<p style="font-size:20px; font-family:\"Times New Roman\", serif; color:#333333e;">1. Country CO₂ Emissions per Year Over Time</p>', unsafe_allow_html=True)

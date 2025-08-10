@@ -60,8 +60,12 @@ combined2=combined2.dropna().sort_values(by='Country')
 st.title("Project Dashboard")
 st.write("Main outputs of both individual project and group project are demonstrated as follows.")
 st.sidebar.title("Navigation")
-b1 = st.sidebar.button("Variations of CO₂ Emissions Over Time")
-b2 = st.sidebar.button("Relationship Between CO₂ Emissions and Temperature or Natural Disasters")
+b1=st.sidebar.button("CO₂ Emissions per Year")
+b2=st.sidebar.button("Top 10 Emissions-producing Countries")
+b3=st.sidebar.button("Tile Plot of the Top 10 CO₂ Emission-producing Countries")
+b4=st.sidebar.button("Facet Figure")
+b5=st.sidebar.button("Emissions&Temperature (USA)")
+b6=st.sidebar.button("Emissions&Temperature/Natural Disasters (Germany)")
 st.markdown("""
     <style>
         .css-1lcbk24 {
@@ -130,6 +134,7 @@ if b1:
         plt.tight_layout()
         st.pyplot(fig)
     else: None
+if b2:
     ##2
     st.markdown('<p style="font-size:20px; font-family:\"Times New Roman\", serif; color:#333333e;">2. Top 10 Emissions-producing Countries (1900-2019)</p>', unsafe_allow_html=True)
     d2019=co2[co2['Year']==2019].copy()
@@ -154,6 +159,7 @@ if b1:
     plt.tight_layout()
     st.pyplot(fig)
     
+if b3:
     ##3
     st.markdown('<p style="font-size:20px; font-family:\"Times New Roman\", serif; color:#333333e;">3. Tile Plot of the Top 10 CO₂ Emission-producing Countries</p>', unsafe_allow_html=True)
     etop['loge']=np.log(etop['Value'])
@@ -172,7 +178,8 @@ if b1:
     plt.xticks()
     plt.tight_layout()
     st.pyplot(fig)
-    
+
+if b4:
     ##4
     st.markdown('<p style="font-size:20px; font-family:\"Times New Roman\", serif; color:#333333e;">4. Facet Figure: Distributions of Indicators by Year and Value</p>', unsafe_allow_html=True)
     us2 = st.button("USA",key='us2')
@@ -234,3 +241,15 @@ if b1:
         plt.tight_layout(rect=[0, 0, 1, 0.97])
         plt.suptitle("Distribution of Indicators by Year and Value", fontsize=16)
         st.pyplot(fig)
+if b5:
+
+if b6:
+    col1, col2, col3,col4= st.columns(4)
+    col1.metric("Emissions Mean","716447")
+    col2.metric("Emissions SD","257147")
+    col3.metric("Temperature Mean","47.75°F")
+    col4.metric("Temperature SD","1.6°F")
+    st.write("The Correlation Coefficient for CO₂ Emissions and Temperature/Natural Disasters")
+    col5,col6=st.columns(2)
+    col5.metric("Emissions&Temperature","0.2013")
+    col6.metric("Emissions&Natural Disasters","0.0438")

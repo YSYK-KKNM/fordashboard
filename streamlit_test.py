@@ -256,41 +256,26 @@ elif b5:
     
     us = combined1[(combined1['Country'] == 'USA') & (combined1['Year'].between(1900, 2024)) & (combined1['Indicator'].isin(['Emissions', 'Temperature']))]
     li_us = us.pivot(index='Year', columns='Indicator', values='Value').reset_index()
-    
-    # Debugging step: Check the columns
-    st.write("Columns in the pivoted data frame:", li_us.columns)
-    
-    # Ensure that the correct column names are being used
-    if 'Emissions' in li_us.columns and 'Temperature' in li_us.columns:
-        df = li_us.copy()
-        scaler = StandardScaler()
-        df[['sc_emissions', 'sc_temperature']] = scaler.fit_transform(df[['Emissions', 'Temperature']])
+    df=li_us.copy()
+    scaler=StandardScaler()
+    df[['sc_emissions', 'sc_temperature']]=scaler.fit_transform(df[['Emissions', 'Temperature']])
+    X=df['sc_emissions']
+    y=df['sc_temperature']
+    ##use model to conduct regression
+    X=sm.add_constant(X)
+    model=sm.OLS(y, X)
+    results=model.fit()
+    ## make the scatter plot and apply the regression line on it.
+    y_sc=results.predict(X)
+    plt.figure(figsize=(12, 6))
+    plt.scatter(df['sc_emissions'], df['sc_temperature'], label='Standardized CO₂ Emissions', color='black', alpha=0.8)
+    plt.plot(df['sc_emissions'], y_sc, color='blue', linewidth=2)
+    plt.title('US $\mathrm{CO}_2$ Emissions and Temperature (1980-2014)', fontsize=16)
+    plt.xlabel('Scaled Emissions (Metric Tonnes)', fontsize=12)
+    plt.ylabel('Scaled Temperature (Fahrenheit)', fontsize=12)
+    plt.grid(alpha=0.3)    
+    st.pyplot(plt)
 
-        x = df['sc_emissions']
-        y = df['sc_temperature']
-        
-        tocl = pd.concat([x, y], axis=1)
-        clean = tocl.dropna()
-        
-        x = clean['sc_emissions']
-        y = clean['sc_temperature']
-        
-        x = sm.add_constant(x)
-        model = sm.OLS(y, x)
-        results = model.fit()
-        y_sc = results.predict(x)
-        
-        plt.figure(figsize=(12, 6))
-        plt.scatter(x, y, label='Standardized CO₂ Emissions', color='black', alpha=0.8)
-        plt.plot(x, y_sc, color='blue', linewidth=2)
-        plt.title('USA $\mathrm{CO}_2$ Emissions and Temperature (1900-2024)', fontsize=16)
-        plt.xlabel('Scaled Emissions (Metric Tonnes)', fontsize=12)
-        plt.ylabel('Scaled Temperature (Fahrenheit)', fontsize=12)
-        plt.grid(alpha=0.3)
-        
-        st.pyplot(plt)
-    else:
-        st.error("Columns 'Emissions' or 'Temperature' are missing!")
 
 
 elif b6:

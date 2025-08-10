@@ -59,6 +59,13 @@ combined2=combined2.dropna().sort_values(by='Country')
 
 st.title("Project Dashboard")
 st.write("Main outputs of both individual project and group project are demonstrated as follows.")
+st.markdown("""
+    <style>
+        .css-1d391kg {
+            background-color: red;
+        }
+    </style>
+    """, unsafe_allow_html=True)
 st.sidebar.title("Navigation")
 b1 = st.sidebar.button("Variations of CO₂ Emissions Over Time")
 b2 = st.sidebar.button("Relationship Between CO₂ Emissions and Temperature or Natural Disasters")

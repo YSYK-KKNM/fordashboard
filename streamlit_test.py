@@ -14,9 +14,10 @@ def load_data():
     gdp = pd.read_excel('https://raw.githubusercontent.com/YSYK-KKNM/groupproject/main/GDP_growth.xlsx', skiprows=3)
     energy = pd.read_excel('https://raw.githubusercontent.com/YSYK-KKNM/groupproject/main/energy.xlsx', skiprows=3)
     disaster = pd.read_excel('https://raw.githubusercontent.com/YSYK-KKNM/groupproject/main/disaster.xlsx')
-    temperature = pd.read_excel('https://raw.githubusercontent.com/YSYK-KKNM/groupproject/main/temperature.xlsx')
-    return co2, gdp, energy, disaster, temperature
-co2, gdp, energy, disaster, temperature = load_data()
+    utemperature=pd.read_csv('https://raw.githubusercontent.com/YSYK-KKNM/groupproject/main/temperature.csv', skiprows=4, na_values="-99")
+    gtemperature = pd.read_excel('https://raw.githubusercontent.com/YSYK-KKNM/groupproject/main/temperature.xlsx')
+    return co2, gdp, energy, disaster, utemperature, gtemperature
+co2, gdp, energy, disaster, utemperature, gtemperature = load_data()
 
 co2 = co2.melt(id_vars='country', var_name='Year', value_name='Emissions')
 co2.rename(columns={'country': 'Country'}, inplace=True)
@@ -46,17 +47,24 @@ disasters['Country'] = 'Germany'
 disasters = disasters.melt(id_vars=['Year', 'Country'], var_name='Indicator', value_name='Value')
 disasters['Label'] = 'Number of Disasters'
 
-temperature['Date'] = temperature['Date'].astype(str)
-temperature['Year'] = temperature['Date'].str[:4].astype(int)
-temperature['Country'] = 'Germany'
-temperature['Indicator'] = 'Temperature'
-temperature['Label'] = 'Temperature (Fahrenheit)'
-temperature = temperature[['Year', 'Country', 'Indicator', 'Value', 'Label']]
+utemperature['Date'] = utemperature['Date'].astype(str)
+utemperature['Year'] = utemperature['Date'].str[:4].astype(int)
+utemperature['Country'] = 'USA'
+utemperature['Indicator'] = 'Temperature'
+utemperature['Label'] = 'Temperature (Fahrenheit)'
+utemperature = utemperature[['Year', 'Country', 'Indicator', 'Value', 'Label']]
 
-combined1 = pd.concat([co2, gdp, energy, disasters, temperature], ignore_index=True)
+gtemperature['Date'] = gtemperature['Date'].astype(str)
+gtemperature['Year'] = gtemperature['Date'].str[:4].astype(int)
+gtemperature['Country'] = 'Germany'
+gtemperature['Indicator'] = 'Temperature'
+gtemperature['Label'] = 'Temperature (Fahrenheit)'
+gtemperature = gtemperature[['Year', 'Country', 'Indicator', 'Value', 'Label']]
+
+combined1 = pd.concat([co2, gdp, energy, disasters, utemperature], ignore_index=True)
 combined1['Region'] = combined1['Country'].apply(lambda x: 'USA' if x == 'USA' else 'Rest of the world')
 combined1 = combined1.dropna().sort_values(by='Country')
-combined2 = pd.concat([co2, gdp, energy, disasters, temperature], ignore_index=True)
+combined2 = pd.concat([co2, gdp, energy, disasters, gtemperature], ignore_index=True)
 combined2['Region'] = combined2['Country'].apply(lambda x: 'Germany' if x == 'Germany' else 'Rest of the world')
 combined2 = combined2.dropna().sort_values(by='Country')
 

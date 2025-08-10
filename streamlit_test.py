@@ -134,7 +134,7 @@ if b1:
         plt.tight_layout()
         st.pyplot(fig)
     else: None
-if b2:
+elif b2:
     ##2
     st.markdown('<p style="font-size:20px; font-family:\"Times New Roman\", serif; color:#333333e;">2. Top 10 Emissions-producing Countries (1900-2019)</p>', unsafe_allow_html=True)
     d2019=co2[co2['Year']==2019].copy()
@@ -159,7 +159,7 @@ if b2:
     plt.tight_layout()
     st.pyplot(fig)
     
-if b3:
+elif b3:
     ##3
     st.markdown('<p style="font-size:20px; font-family:\"Times New Roman\", serif; color:#333333e;">3. Tile Plot of the Top 10 CO₂ Emission-producing Countries</p>', unsafe_allow_html=True)
     etop['loge']=np.log(etop['Value'])
@@ -179,7 +179,7 @@ if b3:
     plt.tight_layout()
     st.pyplot(fig)
 
-if b4:
+elif b4:
     ##4
     st.markdown('<p style="font-size:20px; font-family:\"Times New Roman\", serif; color:#333333e;">4. Facet Figure: Distributions of Indicators by Year and Value</p>', unsafe_allow_html=True)
     us2 = st.button("USA",key='us2')
@@ -241,9 +241,9 @@ if b4:
         plt.tight_layout(rect=[0, 0, 1, 0.97])
         plt.suptitle("Distribution of Indicators by Year and Value", fontsize=16)
         st.pyplot(fig)
-if b5:
+elif b5: None
 
-if b6:
+elif b6:
     col1, col2, col3,col4= st.columns(4)
     col1.metric("Emissions Mean","716447")
     col2.metric("Emissions SD","257147")
@@ -253,3 +253,4 @@ if b6:
     col5,col6=st.columns(2)
     col5.metric("Emissions&Temperature","0.2013")
     col6.metric("Emissions&Natural Disasters","0.0438")
+else None

@@ -57,13 +57,18 @@ combined2=pd.concat([co2, gdp, energy, disasters, temperature], ignore_index=Tru
 combined2['Region']=combined2['Country'].apply(lambda x:'Germany' if x=='Germany' else 'Rest of the world')
 combined2=combined2.dropna().sort_values(by='Country')
 
+d2019=co2[co2['Year']==2019].copy()
+d2019['rank']=d2019['Value'].rank(ascending=False)
+top=d2019[d2019['rank']<=10]
+etop=co2[(co2['Country'].isin(top['Country']))&(co2['Year']>=1900)].copy()
+    
 st.title("Project Dashboard")
 st.write("Main outputs of both individual project and group project are demonstrated as follows.")
 st.sidebar.title("Navigation")
 b1=st.sidebar.button("CO₂ Emissions per Year")
 b2=st.sidebar.button("Top 10 Emissions-producing Countries")
 b3=st.sidebar.button("Tile Plot of the Top 10 CO₂ Emission-producing Countries")
-b4=st.sidebar.button("Facet Figure")
+b4=st.sidebar.button("Distributions of Indicators by Year and Value")
 b5=st.sidebar.button("Emissions&Temperature (USA)")
 b6=st.sidebar.button("Emissions&Temperature/Natural Disasters (Germany)")
 st.markdown("""
@@ -137,11 +142,6 @@ if b1:
 elif b2:
     ##2
     st.markdown('<p style="font-size:20px; font-family:\"Times New Roman\", serif; color:#333333e;">2. Top 10 Emissions-producing Countries (1900-2019)</p>', unsafe_allow_html=True)
-    d2019=co2[co2['Year']==2019].copy()
-    d2019['rank']=d2019['Value'].rank(ascending=False)
-    top=d2019[d2019['rank']<=10]
-    etop=co2[(co2['Country'].isin(top['Country']))&(co2['Year']>=1900)].copy()
-    
     cns=etop['Country'].unique()
     colors=cm.viridis(np.linspace(0,1,len(cns)))             
     fig,ax=plt.subplots(figsize=(12,6))

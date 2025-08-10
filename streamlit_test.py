@@ -53,9 +53,12 @@ temperature['Indicator']='Temperature'
 temperature['Label']='Temperature (Fahrenheit)'
 temperature=temperature[['Year', 'Country', 'Indicator', 'Value', 'Label']]
 
-combined=pd.concat([co2, gdp, energy, disasters, temperature], ignore_index=True)
-combined['Region']=combined['Country'].apply(lambda x:'Germany' if x=='Germany' else 'Rest of the world')
-combined=combined.dropna().sort_values(by='Country')
+combined1=pd.concat([co2, gdp, energy, disasters, temperature], ignore_index=True)
+combined1['Region']=combined1['Country'].apply(lambda x:'USA' if x=='USA' else 'Rest of the world')
+combined1=combined1.dropna().sort_values(by='Country')
+combined2=pd.concat([co2, gdp, energy, disasters, temperature], ignore_index=True)
+combined2['Region']=combined2['Country'].apply(lambda x:'Germany' if x=='Germany' else 'Rest of the world')
+combined2=combined2.dropna().sort_values(by='Country')
 
 import matplotlib.pyplot as plt
 us = st.button("USA")
@@ -79,7 +82,7 @@ if not us and not ger:
     plt.tight_layout()
     st.pyplot(fig)
                 
-if us:
+elif us:
     fig, ax = plt.subplots(figsize=(12, 6))
     for country in co2['Country'].unique():
         xf = co2.loc[co2['Country'] == country]
@@ -156,6 +159,68 @@ ax.set_ylabel('Country',fontsize=12)
 plt.xticks()
 plt.tight_layout()
 st.pyplot(fig)
+
+##4
+st.markdown('<p style="font-size:20px; font-family:\"Times New Roman\", serif; color:#333333e;">4. Facet Figure: Distributions of Indicators by Year and Value</p>', unsafe_allow_html=True)
+us = st.button("USA")
+ger = st.button("Germany")
+
+if not us and not ger:
+    st.write('Please Select a Country First.')
+elif us:
+    fig,axes=plt.subplots(3,2, figsize=(14, 9), sharex='col',sharey='row')
+    indicators=['Emissions', 'Energy', 'GDP']
+    regions=['Rest of the world', 'United States']
+    xl=(1750, 2025)
+    yl=[]
+    for indicator in indicators:
+        lm=combined1[combined1['Indicator']==indicator]
+        yl.append((lm['Value'].min(), lm['Value'].max()))
+    for i, indicator in enumerate(indicators):
+        for j, region in enumerate(regions):
+            ax=axes[i, j]
+            zf=combined1[(combined1['Indicator']==indicator)&(combined1['Region']==region)]
+            for country in zf['Country'].unique():
+                wf=zf[zf['Country']==country]
+                sns.lineplot(data=wf, x='Year', y='Value', ax=ax,color='black', linewidth=0.8, alpha=0.7)
+            ax.set_xlim(xl)
+            ax.set_ylim(yl[i]) 
+            if i==0:
+                ax.set_title(region, fontsize=14,)
+            if j==0:
+                ax.set_ylabel(indicator, fontsize=12)
+            if i==2:
+                ax.set_xlabel('Year', fontsize=11)        
+    plt.tight_layout(rect=[0, 0, 1, 0.97])
+    plt.suptitle('Distribution of Indicators by Year and Value', fontsize=16)
+    st.pyplot(fig)
+elif ger:
+    fig,axes=plt.subplots(3,2, figsize=(14, 9), sharex='col',sharey='row')
+    indicators=['Emissions', 'Energy', 'GDP']
+    regions=['Rest of the world', 'Germany']
+    xl=(1750, 2025)
+    yl=[]
+    for indicator in indicators:
+        lm=combined2[combined2['Indicator']==indicator]
+        yl.append((lm['Value'].min(), lm['Value'].max()))
+    for i, indicator in enumerate(indicators):
+        for j, region in enumerate(regions):
+            ax=axes[i, j]
+            zf=combined2[(combined2['Indicator']==indicator)&(combined2['Region']==region)]
+            for country in zf['Country'].unique():
+                wf=zf[zf['Country']==country]
+                sns.lineplot(data=wf, x='Year', y='Value', ax=ax,color='black', linewidth=0.8, alpha=0.7)
+            ax.set_xlim(xl)
+            ax.set_ylim(yl[i]) 
+            if i==0:
+                ax.set_title(region, fontsize=14,)
+            if j==0:
+                ax.set_ylabel(indicator, fontsize=12)
+            if i==2:
+                ax.set_xlabel("Year", fontsize=11)        
+    plt.tight_layout(rect=[0, 0, 1, 0.97])
+    plt.suptitle("Distribution of Indicators by Year and Value", fontsize=16)
+    st.pyplot(fig)
 
 
 

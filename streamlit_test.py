@@ -67,14 +67,6 @@ etop = co2[(co2['Country'].isin(top['Country'])) & (co2['Year'] >= 1900)].copy()
 
 st.title("Project Dashboard")
 st.write("Main outputs of both individual project and group project are demonstrated as follows.")
-st.sidebar.title("Navigation")
-b1 = st.sidebar.button("CO₂ Emissions per Year Over Time")
-b2 = st.sidebar.button("Top 10 Emissions-producing Countries")
-b3 = st.sidebar.button("Tile Plot of the Top 10 CO₂ Emission-producing Countries")
-b4 = st.sidebar.button("Distributions of Indicators by Year and Value")
-b5 = st.sidebar.button("Emissions&Temperature (USA)")
-b6 = st.sidebar.button("Emissions&Temperature/Natural Disasters (Germany)")
-
 st.markdown("""
     <style>
         .css-1lcbk24 {
@@ -83,16 +75,26 @@ st.markdown("""
     </style>
     """, unsafe_allow_html=True)
 
+if 'country_selected' not in st.session_state:
+    st.session_state.country_selected = 'USA' 
+st.sidebar.title("Navigation")
+b1 = st.sidebar.button("CO₂ Emissions per Year Over Time")
+b2 = st.sidebar.button("Top 10 Emissions-producing Countries")
+b3 = st.sidebar.button("Tile Plot of the Top 10 CO₂ Emission-producing Countries")
+b4 = st.sidebar.button("Distributions of Indicators by Year and Value")
+b5 = st.sidebar.button("Emissions&Temperature (USA)")
+b6 = st.sidebar.button("Emissions&Temperature/Natural Disasters (Germany)")
 if b1:
     st.markdown('<p style="font-size:20px; font-family:\"Times New Roman\", serif; color:#333333e;">1. Country CO₂ Emissions per Year Over Time</p>', unsafe_allow_html=True)
     st.markdown('<p style="font-size:16px; font-family:\"Times New Roman\", serif; color:#333333; line-height:1.6;">You may select a country to highlight by pressing the button</p>', unsafe_allow_html=True)
 
-    co= st.radio(
+    country_selected = st.radio(
         "Select a country to view CO₂ Emissions per Year",
-        ('USA', 'Germany')
+        ('USA', 'Germany'),
+        index=0 if st.session_state.country_selected == 'USA' else 1
     )
-    
-    if co== 'USA':
+    st.session_state.country_selected = country_selected
+    if st.session_state.country_selected == 'USA':
         fig, ax = plt.subplots(figsize=(12, 6))
         for country in co2['Country'].unique():
             xf = co2.loc[co2['Country'] == country]
@@ -109,8 +111,8 @@ if b1:
         ax.grid(alpha=0.3)
         plt.tight_layout()
         st.pyplot(fig)
-    
-    elif co == 'Germany':
+        
+    elif st.session_state.country_selected == 'Germany':
         fig, ax = plt.subplots(figsize=(12, 6))
         for country in co2['Country'].unique():
             xf = co2.loc[co2['Country'] == country]
@@ -127,7 +129,9 @@ if b1:
         ax.grid(alpha=0.3)
         plt.tight_layout()
         st.pyplot(fig)
-    else: None
+
+    else:
+        st.write("Please pick a country first")
 
 
 elif b2:
@@ -165,10 +169,11 @@ elif b3:
     plt.tight_layout()
     st.pyplot(fig)
 
-elif b4:
+if b4:
     st.markdown('<p style="font-size:20px; font-family:\"Times New Roman\", serif; color:#333333e;">4. Facet Figure: Distributions of Indicators by Year and Value</p>', unsafe_allow_html=True)
-    co=st.radio("Select a country", ("USA", "Germany"))
-    if co=="USA":
+    co = st.radio("Select a country", ("USA", "Germany"), index=0 if st.session_state.country_selected == 'USA' else 1)
+    st.session_state.country_selected = co
+    if st.session_state.country_selected == "USA":
         fig, axes = plt.subplots(3, 2, figsize=(14, 9), sharex='col', sharey='row')
         indicators = ['Emissions', 'Energy', 'GDP']
         regions = ['Rest of the world', 'USA']
@@ -196,7 +201,7 @@ elif b4:
         plt.suptitle('Distribution of Indicators by Year and Value (USA)', fontsize=16)
         st.pyplot(fig)
     
-    elif co=="Germany":
+    elif st.session_state.country_selected == "Germany":
         fig, axes = plt.subplots(3, 2, figsize=(14, 9), sharex='col', sharey='row')
         indicators = ['Emissions', 'Energy', 'GDP']
         regions = ['Rest of the world', 'Germany']
@@ -224,8 +229,7 @@ elif b4:
         plt.suptitle("Distribution of Indicators by Year and Value (Germany)", fontsize=16)
         st.pyplot(fig)
     else:
-        None
-
+        st.write("Please Select a Country First.")
 
 elif b5:
     st.markdown('<p style="font-size:20px; font-family:\"Times New Roman\", serif; color:#333333e;">Relationship Between Emissions and Temperature for USA</p>', unsafe_allow_html=True)

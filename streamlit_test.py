@@ -113,8 +113,7 @@ elif ger:
     ax.grid(alpha=0.3)
     plt.tight_layout()
     st.pyplot(fig)
-else:
-    st.write("Please select a country to see the graph.")
+else: None
 ##2
 st.markdown('<p style="font-size:20px; font-family:\"Times New Roman\", serif; color:#333333e;">2. Top 10 Emissions-producing Countries (1900-2019)</p>', unsafe_allow_html=True)
 d2019=co2[co2['Year']==2019].copy()
@@ -139,10 +138,26 @@ ax.grid(alpha=0.3)
 plt.tight_layout()
 st.pyplot(fig)
 
+##3
+st.markdown('<p style="font-size:20px; font-family:\"Times New Roman\", serif; color:#333333e;">3. Tile Plot of the Top 10 CO₂ Emission-producing Countries</p>', unsafe_allow_html=True)
+etop['loge']=np.log(etop['Value'])
+tp=top[['Country','rank']]
+etop=etop.merge(tp,on='Country',how='left')
+etop.sort_values(['rank', 'Year'],inplace=True)
+mapdata=etop.pivot(index='Country',columns='Year',values='loge')
+import seaborn as sns
+fig,ax=plt.subplots(figsize=(12,6))
+sns.heatmap(mapdata,cmap='viridis',cbar_kws={'label':'Ln($\mathrm{CO}_2$ Emissions)'},xticklabels=5)
+##In this part of code, we can use ax.text to insert title in case it overlaps the sentence under it.
+ax.text(0.24, 1.08, "Top 10 $\mathrm{CO}_2$ Emission-producing Countries", fontsize=16, transform=ax.transAxes)
+ax.text(0.001, 1.03, "Ordered by Emissions Produced in 2019", fontsize=12, transform=ax.transAxes)
+ax.set_xlabel('Year',fontsize=12)
+ax.set_ylabel('Country',fontsize=12)
+plt.xticks()
+plt.tight_layout()
+st.pyplot(fig)
 
 
 
 
 
-
-top=d2019[d2019['rank']<=10]

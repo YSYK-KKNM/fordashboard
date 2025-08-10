@@ -4,6 +4,8 @@ import openpyxl
 import matplotlib.pyplot as plt
 import matplotlib.cm as cm
 import numpy as np
+from sklearn.preprocessing import StandardScaler
+import statsmodels.api as sm
 
 @st.cache_data
 def load_data():
@@ -65,7 +67,7 @@ etop=co2[(co2['Country'].isin(top['Country']))&(co2['Year']>=1900)].copy()
 st.title("Project Dashboard")
 st.write("Main outputs of both individual project and group project are demonstrated as follows.")
 st.sidebar.title("Navigation")
-b1=st.sidebar.button("CO₂ Emissions per Year")
+b1=st.sidebar.button("CO₂ Emissions per Year Over Time")
 b2=st.sidebar.button("Top 10 Emissions-producing Countries")
 b3=st.sidebar.button("Tile Plot of the Top 10 CO₂ Emission-producing Countries")
 b4=st.sidebar.button("Distributions of Indicators by Year and Value")
@@ -241,9 +243,39 @@ elif b4:
         plt.tight_layout(rect=[0, 0, 1, 0.97])
         plt.suptitle("Distribution of Indicators by Year and Value", fontsize=16)
         st.pyplot(fig)
-elif b5: None
-
+elif b5: 
+    st.markdown('<p style="font-size:20px; font-family:\"Times New Roman\", serif; color:#333333e;">Relationship Between Emissions and Temperature for USA</p>', unsafe_allow_html=True)
+    st.write("The Mean and Standard Deviation of CO₂ Emissions and Temperature")
+    col1, col2, col3,col4= st.columns(4)
+    col1.metric("Emissions Mean","5142286")
+    col2.metric("Emissions SD","450549")
+    col3.metric("Temperature Mean","52.87°F")
+    col4.metric("Temperature SD","0.89°F")
+    st.write("The Correlation Coefficient for CO₂ Emissions and Temperature")
+    col5=st.columns(1)
+    col5.metric("Emissions&Temperature","0.4712")
+    us=combined[(combined['Country']=='United States')&(combined['Year'].between(1980,2014))&(combined['Indicator'].isin(['Emissions', 'Temperature']))]
+    li_us=us.pivot(index='Year', columns='Indicator', values='Value').reset_index()
+    df=li_us.copy()
+    scaler=StandardScaler()
+    df[['sc_emissions', 'sc_temperature']]=scaler.fit_transform(df[['Emissions', 'Temperature']])
+    X=df['sc_emissions']
+    y=df['sc_temperature']
+    X=sm.add_constant(X)
+    model=sm.OLS(y, X)
+    results=model.fit()
+    y_sc=results.predict(X)
+    plt.figure(figsize=(12, 6))
+    plt.scatter(df['sc_emissions'], df['sc_temperature'], label='Standardized CO₂ Emissions', color='black', alpha=0.8)
+    plt.plot(df['sc_emissions'], y_sc, color='blue', linewidth=2)
+    plt.title('US $\mathrm{CO}_2$ Emissions and Temperature (1980-2014)', fontsize=16)
+    plt.xlabel('Scaled Emissions (Metric Tonnes)', fontsize=12)
+    plt.ylabel('Scaled Temperature (Fahrenheit)', fontsize=12)
+    plt.grid(alpha=0.3)
+    st.pyplot(plt)
 elif b6:
+    st.markdown('<p style="font-size:20px; font-family:\"Times New Roman\", serif; color:#333333e;">Relationship Between Emissions and Temperature/Natural Disasters for Germany</p>', unsafe_allow_html=True)
+    st.write("The Mean and Standard Deviation of CO₂ Emissions and Temperature")
     col1, col2, col3,col4= st.columns(4)
     col1.metric("Emissions Mean","716447")
     col2.metric("Emissions SD","257147")
@@ -253,4 +285,29 @@ elif b6:
     col5,col6=st.columns(2)
     col5.metric("Emissions&Temperature","0.2013")
     col6.metric("Emissions&Natural Disasters","0.0438")
-else: None
+    ger=combined[(combined['Country']=='Germany')&(combined['Year'].between(1900,2024))&(combined['Indicator'].isin(['Emissions', 'Temperature']))]
+    li_ger=ger.pivot(index='Year', columns='Indicator', values='Value').reset_index()
+    df=li_ger.copy()
+    scaler=StandardScaler()
+    df[['sc_emissions', 'sc_temperature']]=scaler.fit_transform(df[['Emissions', 'Temperature']])
+    x=df['sc_emissions']
+    y=df['sc_temperature']
+    tocl=pd.concat([x,y],axis=1)
+    clean=tocl.dropna()
+    x=clean['sc_emissions']
+    y=clean['sc_temperature']
+    x=sm.add_constant(x)
+    model=sm.OLS(y, x)
+    results=model.fit()
+    y_sc=results.predict(x)
+    plt.figure(figsize=(12, 6))
+    plt.scatter(x['sc_emissions'], y, label='Standardized CO₂ Emissions', color='black', alpha=0.8)
+    plt.plot(x['sc_emissions'], y_sc, color='blue', linewidth=2)
+    plt.title('Germany $\mathrm{CO}_2$ Emissions and Temperature (1980-2024)', fontsize=16)
+    plt.xlabel('Scaled Emissions (Metric Tonnes)', fontsize=12)
+    plt.ylabel('Scaled Temperature (Fahrenheit)', fontsize=12)
+    plt.grid(alpha=0.3)
+    st.pyplot(plt)
+else: 
+    st.write("Select a module on the left first.")
+    

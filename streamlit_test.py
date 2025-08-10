@@ -169,7 +169,7 @@ elif b3:
     plt.tight_layout()
     st.pyplot(fig)
 
-if b4:
+elif b4:
     st.markdown('<p style="font-size:20px; font-family:\"Times New Roman\", serif; color:#333333e;">4. Facet Figure: Distributions of Indicators by Year and Value</p>', unsafe_allow_html=True)
     co = st.radio("Select a country", ("USA", "Germany"), index=0 if st.session_state.country_selected == 'USA' else 1)
     st.session_state.country_selected = co
@@ -234,36 +234,47 @@ if b4:
 elif b5:
     st.markdown('<p style="font-size:20px; font-family:\"Times New Roman\", serif; color:#333333e;">Relationship Between Emissions and Temperature for USA</p>', unsafe_allow_html=True)
     st.write("The Mean and Standard Deviation of CO₂ Emissions and Temperature")
+    
     col1, col2, col3, col4 = st.columns(4)
     col1.metric("Emissions Mean", "5142286")
     col2.metric("Emissions SD", "450549")
     col3.metric("Temperature Mean", "52.87°F")
     col4.metric("Temperature SD", "0.89°F")
+    
     st.write("The Correlation Coefficient for CO₂ Emissions and Temperature")
+    
     col5 = st.columns(1)
-    col5[0].metric("Emissions&Temperature", "0.4712")
+    col5[0].metric("Emissions & Temperature Correlation", "0.4712")
+    
     us = combined1[(combined1['Country'] == 'USA') & (combined1['Year'].between(1900, 2024)) & (combined1['Indicator'].isin(['Emissions', 'Temperature']))]
     li_us = us.pivot(index='Year', columns='Indicator', values='Value').reset_index()
+    
     df = li_us.copy()
     scaler = StandardScaler()
     df[['sc_emissions', 'sc_temperature']] = scaler.fit_transform(df[['Emissions', 'Temperature']])
+    
     x = df['sc_emissions']
     y = df['sc_temperature']
+    
     tocl = pd.concat([x, y], axis=1)
     clean = tocl.dropna()
+    
     x = clean['sc_emissions']
     y = clean['sc_temperature']
+    
     x = sm.add_constant(x)
     model = sm.OLS(y, x)
     results = model.fit()
     y_sc = results.predict(x)
+    
     plt.figure(figsize=(12, 6))
-    plt.scatter(x['sc_emissions'], y, label='Standardized CO₂ Emissions', color='black', alpha=0.8)
-    plt.plot(x['sc_emissions'], y_sc, color='blue', linewidth=2)
-    plt.title('Germany $\mathrm{CO}_2$ Emissions and Temperature (1980-2024)', fontsize=16)
+    plt.scatter(x, y, label='Standardized CO₂ Emissions', color='black', alpha=0.8)
+    plt.plot(x, y_sc, color='blue', linewidth=2)
+    plt.title('USA $\mathrm{CO}_2$ Emissions and Temperature (1900-2024)', fontsize=16)  # 更新为美国
     plt.xlabel('Scaled Emissions (Metric Tonnes)', fontsize=12)
     plt.ylabel('Scaled Temperature (Fahrenheit)', fontsize=12)
     plt.grid(alpha=0.3)
+    
     st.pyplot(plt)
 
 elif b6:

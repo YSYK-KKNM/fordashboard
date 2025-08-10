@@ -60,7 +60,7 @@ combined2=combined2.dropna().sort_values(by='Country')
 st.title("Project Dashboard")
 st.write("Main outputs of both individual project and group project are demonstrated as follows.")
 st.markdown("""
-    <style>
+    f<style>
         .css-1d391kg {
             background-color: red;
         }

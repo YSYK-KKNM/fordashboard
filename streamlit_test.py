@@ -119,6 +119,7 @@ else:
 st.markdown('<p style="font-size:20px; font-family:\"Times New Roman\", serif; color:#333333e;">2. Top 10 Emissions-producing Countries (1900-2019)</p>', unsafe_allow_html=True)
 d2019=co2[co2['Year']==2019].copy()
 d2019['rank']=d2019['Value'].rank(ascending=False)
+top=d2019[d2019['rank']<=10]
 etop=co2[(co2['Country'].isin(top['Country']))&(co2['Year']>=1900)].copy()
 import matplotlib.cm as cm
 cns=etop['Country'].unique()

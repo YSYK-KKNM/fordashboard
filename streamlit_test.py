@@ -83,66 +83,72 @@ st.markdown("""
     </style>
     """, unsafe_allow_html=True)
 
-if 'country_selected' not in st.session_state:
-    st.session_state.country_selected = 'USA' 
-st.sidebar.title("Navigation")
-b1 = st.sidebar.button("CO₂ Emissions per Year Over Time")
-b2 = st.sidebar.button("Top 10 Emissions-producing Countries")
-b3 = st.sidebar.button("Tile Plot of the Top 10 CO₂ Emission-producing Countries")
-b4 = st.sidebar.button("Distributions of Indicators by Year and Value")
-b5 = st.sidebar.button("Emissions&Temperature (USA)")
-b6 = st.sidebar.button("Emissions&Temperature/Natural Disasters (Germany)")
-if b1:
-    st.markdown('<p style="font-size:20px; font-family:\"Times New Roman\", serif; color:#333333e;">1. Country CO₂ Emissions per Year Over Time</p>', unsafe_allow_html=True)
-    st.markdown('<p style="font-size:16px; font-family:\"Times New Roman\", serif; color:#333333; line-height:1.6;">You may select a country to highlight by pressing the button</p>', unsafe_allow_html=True)
+if "page" not in st.session_state:
+    st.session_state.page = "b1"  # 默认显示第1页
+if "country_selected" not in st.session_state:
+    st.session_state.country_selected = "USA"
 
+def set_page(p):
+    st.session_state.page = p
+
+# ---- 侧边栏导航 ----
+st.sidebar.title("Navigation")
+st.sidebar.button("CO₂ Emissions per Year Over Time", on_click=set_page, args=("b1",))
+st.sidebar.button("Top 10 Emissions-producing Countries", on_click=set_page, args=("b2",))
+st.sidebar.button("Tile Plot of the Top 10 CO₂ Emission-producing Countries", on_click=set_page, args=("b3",))
+st.sidebar.button("Distributions of Indicators by Year and Value", on_click=set_page, args=("b4",))
+st.sidebar.button("Emissions&Temperature (USA)", on_click=set_page, args=("b5",))
+st.sidebar.button("Emissions&Temperature/Natural Disasters (Germany)", on_click=set_page, args=("b6",))
+
+# ---- 渲染页面 ----
+page = st.session_state.page
+
+if page == "b1":
+    st.markdown(
+        '<p style="font-size:20px; font-family:\'Times New Roman\', serif; color:#333333;">'
+        '1. Country CO₂ Emissions per Year Over Time'
+        '</p>',
+        unsafe_allow_html=True
+    )
+    st.markdown(
+        '<p style="font-size:16px; font-family:\'Times New Roman\', serif; color:#333333; line-height:1.6;">'
+        'You may select a country to highlight by pressing the button'
+        '</p>',
+        unsafe_allow_html=True
+    )
+
+    # 国家选择
     country_selected = st.radio(
         "Select a country to view CO₂ Emissions per Year",
-        ('USA', 'Germany'),
-        index=0 if st.session_state.country_selected == 'USA' else 1
+        ("USA", "Germany"),
+        index=0 if st.session_state.country_selected == "USA" else 1,
+        key="country_selected"
     )
-    st.session_state.country_selected = country_selected
-    if st.session_state.country_selected == 'USA':
-        fig, ax = plt.subplots(figsize=(12, 6))
-        for country in co2['Country'].unique():
-            xf = co2.loc[co2['Country'] == country]
-            ax.plot(xf['Year'], xf['Value'], alpha=1,
-                    color='blue' if country == 'USA' else 'gray',
-                    linewidth=1.2 if country == 'USA' else 0.8,
-                    label='United States' if country == 'USA' else None)
-        ax.set_title('Country $\mathrm{CO}_2$ Emissions per Year (1751–2019)', fontsize=16)
-        ax.set_xlabel('Year', fontsize=12)
-        ax.set_ylabel('Emissions (Metric Tonnes)', fontsize=12)
-        ax.legend(fontsize=12)
-        ax.text(0.785, -0.114, 'Limited to reporting countries', transform=ax.transAxes, fontsize=12)
-        ax.tick_params(labelsize=12)
-        ax.grid(alpha=0.3)
-        plt.tight_layout()
-        st.pyplot(fig)
-        
-    elif st.session_state.country_selected == 'Germany':
-        fig, ax = plt.subplots(figsize=(12, 6))
-        for country in co2['Country'].unique():
-            xf = co2.loc[co2['Country'] == country]
-            ax.plot(xf['Year'], xf['Value'], alpha=1,
-                    color='blue' if country == 'Germany' else 'gray',
-                    linewidth=1.2 if country == 'Germany' else 0.8,
-                    label='Germany' if country == 'Germany' else None)
-        ax.set_title('Country $\mathrm{CO}_2$ Emissions per Year (1751–2019)', fontsize=16)
-        ax.set_xlabel('Year', fontsize=12)
-        ax.set_ylabel('Emissions (Metric Tonnes)', fontsize=12)
-        ax.legend(fontsize=12)
-        ax.text(0.785, -0.114, 'Limited to reporting countries', transform=ax.transAxes, fontsize=12)
-        ax.tick_params(labelsize=12)
-        ax.grid(alpha=0.3)
-        plt.tight_layout()
-        st.pyplot(fig)
 
-    else:
-        st.write("Please pick a country first")
+    # 绘图
+    fig, ax = plt.subplots(figsize=(12, 6))
+    for country in co2["Country"].unique():
+        xf = co2.loc[co2["Country"] == country]
+        ax.plot(
+            xf["Year"],
+            xf["Value"],
+            alpha=1,
+            color="blue" if country == country_selected else "gray",
+            linewidth=1.2 if country == country_selected else 0.8,
+            label=country if country == country_selected else None,
+        )
 
+    ax.set_title("Country $\\mathrm{CO}_2$ Emissions per Year (1751–2019)", fontsize=16)
+    ax.set_xlabel("Year", fontsize=12)
+    ax.set_ylabel("Emissions (Metric Tonnes)", fontsize=12)
+    ax.legend(fontsize=12)
+    ax.text(0.785, -0.114, "Limited to reporting countries", transform=ax.transAxes, fontsize=12)
+    ax.tick_params(labelsize=12)
+    ax.grid(alpha=0.3)
+    plt.tight_layout()
+    st.pyplot(fig)
 
-elif b2:
+elif page=="b2":
     st.markdown('<p style="font-size:20px; font-family:\"Times New Roman\", serif; color:#333333e;">2. Top 10 Emissions-producing Countries (1900-2019)</p>', unsafe_allow_html=True)
     cns = etop['Country'].unique()
     colors = cm.viridis(np.linspace(0, 1, len(cns)))
@@ -160,7 +166,7 @@ elif b2:
     plt.tight_layout()
     st.pyplot(fig)
 
-elif b3:
+elif page=="b3":
     st.markdown('<p style="font-size:20px; font-family:\"Times New Roman\", serif; color:#333333e;">3. Tile Plot of the Top 10 CO₂ Emission-producing Countries</p>', unsafe_allow_html=True)
     etop['loge'] = np.log(etop['Value'])
     tp = top[['Country', 'rank']]
@@ -177,7 +183,7 @@ elif b3:
     plt.tight_layout()
     st.pyplot(fig)
 
-elif b4:
+elif page=="b4":
     st.markdown('<p style="font-size:20px; font-family:\"Times New Roman\", serif; color:#333333e;">4. Facet Figure: Distributions of Indicators by Year and Value</p>', unsafe_allow_html=True)
     co = st.radio("Select a country", ("USA", "Germany"), index=0 if st.session_state.country_selected == 'USA' else 1)
     st.session_state.country_selected = co
@@ -239,7 +245,7 @@ elif b4:
     else:
         st.write("Please Select a Country First.")
 
-elif b5:
+elif page=="b5":
     st.markdown('<p style="font-size:20px; font-family:\"Times New Roman\", serif; color:#333333e;">Relationship Between Emissions and Temperature for USA</p>', unsafe_allow_html=True)
     st.write("The Mean and Standard Deviation of CO₂ Emissions and Temperature")
     
@@ -270,7 +276,7 @@ elif b5:
     plt.figure(figsize=(12, 6))
     plt.scatter(df['sc_emissions'], df['sc_temperature'], label='Standardized CO₂ Emissions', color='black', alpha=0.8)
     plt.plot(df['sc_emissions'], y_sc, color='blue', linewidth=2)
-    plt.title('US $\mathrm{CO}_2$ Emissions and Temperature (1980-2014)', fontsize=16)
+    plt.title('US $\mathrm{CO}_2$ Emissions and Temperature (1980-2024)', fontsize=16)
     plt.xlabel('Scaled Emissions (Metric Tonnes)', fontsize=12)
     plt.ylabel('Scaled Temperature (Fahrenheit)', fontsize=12)
     plt.grid(alpha=0.3)    
@@ -278,7 +284,7 @@ elif b5:
 
 
 
-elif b6:
+elif page=="b6":
     st.markdown('<p style="font-size:20px; font-family:\"Times New Roman\", serif; color:#333333e;">Relationship Between Emissions and Temperature/Natural Disasters for Germany</p>', unsafe_allow_html=True)
     st.write("The Mean and Standard Deviation of CO₂ Emissions and Temperature")
     col1, col2, col3, col4 = st.columns(4)

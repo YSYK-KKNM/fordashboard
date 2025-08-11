@@ -313,7 +313,7 @@ elif page=="b6":
     plt.grid(alpha=0.3)
     st.pyplot(plt)
     st.write("The Correlation Coefficient for CO₂ Emissions and Each Type of Natural Disaster")
-    colors = cm.viridis(np.linspace(0, 1, len(cns)))
+    colors = cm.viridis(np.linspace(0, 1, 7))
     corrs = {}
     gm=co2[(co2['Country']=='Germany')&(co2['Year'].between(1900,2024))]
     codi=pd.merge(disaster,gm,on='Year',how='inner')

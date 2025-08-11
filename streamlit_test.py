@@ -102,6 +102,7 @@ page = st.session_state.page
 
 if page=="b0":
     st.title("Project Dashboard")
+    st.write("By Zebin You")
     st.markdown(
         '<p style="font-size:28px; font-family:\'Times New Roman\', serif; color:#333333;">'
         'Main outputs of both individual project and group project are demonstrated in this dashboard.'

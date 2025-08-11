@@ -270,7 +270,7 @@ elif page=="b5":
     plt.figure(figsize=(12, 6))
     plt.scatter(df['sc_emissions'], df['sc_temperature'], label='Standardized CO₂ Emissions', color='black', alpha=0.8)
     plt.plot(df['sc_emissions'], y_sc, color='blue', linewidth=2)
-    plt.title('US $\mathrm{CO}_2$ Emissions and Temperature (1980-2024)', fontsize=16)
+    plt.title('Germany $\mathrm{CO}_2$ Emissions and Temperature (1980-2024)', fontsize=16)
     plt.xlabel('Scaled Emissions (Metric Tonnes)', fontsize=12)
     plt.ylabel('Scaled Temperature (Fahrenheit)', fontsize=12)
     plt.grid(alpha=0.3)    
@@ -319,7 +319,7 @@ elif page=="b6":
     gm=co2[(co2['Country']=='Germany')&(co2['Year'].between(1900,2024))]
     codi=pd.merge(disaster,gm,on='Year',how='inner')
     for col in disaster.columns[1:]: 
-        corrs[col] = codi['Value'].corr(codi[col], method='pearson')
+        corrs[col] = codi['Value'].corr(codi[col])
     cor=pd.DataFrame(list(corrs.items()), columns=['Disaster Type', 'Correlation with $\mathrm{CO}_2$ Emissions'])
     plt.figure(figsize=(12,6))
     plt.barh(cor['Disaster Type'],cor['Correlation with $\mathrm{CO}_2$ Emissions'], color=colors)

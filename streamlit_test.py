@@ -73,8 +73,6 @@ d2019['rank'] = d2019['Value'].rank(ascending=False)
 top = d2019[d2019['rank'] <= 10]
 etop = co2[(co2['Country'].isin(top['Country'])) & (co2['Year'] >= 1900)].copy()
 
-st.title("Project Dashboard")
-st.write("Main outputs of both individual project and group project are demonstrated as follows.")
 st.markdown("""
     <style>
         .css-1lcbk24 {
@@ -100,38 +98,27 @@ st.sidebar.button("Distributions of Indicators by Year and Value", on_click=set_
 st.sidebar.button("Emissions&Temperature (USA)", on_click=set_page, args=("b5",))
 st.sidebar.button("Emissions&Temperature/Natural Disasters (Germany)", on_click=set_page, args=("b6",))
 
-# ---- 渲染页面 ----
 page = st.session_state.page
 
 if page=="b0":
     st.title("Project Dashboard")
-    st.write("Main outputs of both individual project and group project are demonstrated in this dashboard.")
+    st.markdown(
+        '<p style="font-size:28px; font-family:\'Times New Roman\', serif; color:#333333;">'
+        'Main outputs of both individual project and group project are demonstrated in this dashboard.'
+        '</p>',
+        unsafe_allow_html=True
+    )
     st.write("Please select a module from the sidebar on the left.")
 
 elif page == "b1":
     st.title("Country CO₂ Emissions per Year Over Time")
-    st.markdown(
-        '<p style="font-size:20px; font-family:\'Times New Roman\', serif; color:#333333;">'
-        '1. Country CO₂ Emissions per Year Over Time'
-        '</p>',
-        unsafe_allow_html=True
-    )
-    st.markdown(
-        '<p style="font-size:16px; font-family:\'Times New Roman\', serif; color:#333333; line-height:1.6;">'
-        'You may select a country to highlight by pressing the button'
-        '</p>',
-        unsafe_allow_html=True
-    )
-
-    # 国家选择
-    country_selected = st.radio(
+    cou = st.radio(
         "Select a country to view CO₂ Emissions per Year",
         ("USA", "Germany"),
         index=0 if st.session_state.country_selected == "USA" else 1,
-        key="country_selected"
+        key="cou"
     )
 
-    # 绘图
     fig, ax = plt.subplots(figsize=(12, 6))
     for country in co2["Country"].unique():
         xf = co2.loc[co2["Country"] == country]
@@ -139,9 +126,9 @@ elif page == "b1":
             xf["Year"],
             xf["Value"],
             alpha=1,
-            color="blue" if country == country_selected else "gray",
-            linewidth=1.2 if country == country_selected else 0.8,
-            label=country if country == country_selected else None,
+            color="blue" if country == cou else "gray",
+            linewidth=1.2 if country == cou else 0.8,
+            label=cou if country == cou else None,
         )
 
     ax.set_title("Country $\\mathrm{CO}_2$ Emissions per Year (1751–2019)", fontsize=16)
@@ -155,7 +142,7 @@ elif page == "b1":
     st.pyplot(fig)
 
 elif page=="b2":
-    st.markdown('<p style="font-size:20px; font-family:\"Times New Roman\", serif; color:#333333e;">2. Top 10 Emissions-producing Countries (1900-2019)</p>', unsafe_allow_html=True)
+    st.title('Top 10 Emissions-producing Countries (1900-2019)')
     cns = etop['Country'].unique()
     colors = cm.viridis(np.linspace(0, 1, len(cns)))
     fig, ax = plt.subplots(figsize=(12, 6))
@@ -173,7 +160,7 @@ elif page=="b2":
     st.pyplot(fig)
 
 elif page=="b3":
-    st.markdown('<p style="font-size:20px; font-family:\"Times New Roman\", serif; color:#333333e;">3. Tile Plot of the Top 10 CO₂ Emission-producing Countries</p>', unsafe_allow_html=True)
+    st.title('Tile Plot of the Top 10 CO₂ Emission-producing Countries')
     etop['loge'] = np.log(etop['Value'])
     tp = top[['Country', 'rank']]
     etop = etop.merge(tp, on='Country', how='left')
@@ -190,7 +177,7 @@ elif page=="b3":
     st.pyplot(fig)
 
 elif page=="b4":
-    st.markdown('<p style="font-size:20px; font-family:\"Times New Roman\", serif; color:#333333e;">4. Facet Figure: Distributions of Indicators by Year and Value</p>', unsafe_allow_html=True)
+    st.title('Facet Figure: Distributions of Indicators by Year and Value')
     co = st.radio("Select a country", ("USA", "Germany"), index=0 if st.session_state.country_selected == 'USA' else 1)
     st.session_state.country_selected = co
     if st.session_state.country_selected == "USA":
@@ -252,7 +239,7 @@ elif page=="b4":
         st.write("Please Select a Country First.")
 
 elif page=="b5":
-    st.markdown('<p style="font-size:20px; font-family:\"Times New Roman\", serif; color:#333333e;">Relationship Between Emissions and Temperature for USA</p>', unsafe_allow_html=True)
+    st.title('Relationship Between Emissions and Temperature for USA')
     st.write("The Mean and Standard Deviation of CO₂ Emissions and Temperature")
     
     col1, col2, col3, col4 = st.columns(4)
@@ -291,7 +278,7 @@ elif page=="b5":
 
 
 elif page=="b6":
-    st.markdown('<p style="font-size:20px; font-family:\"Times New Roman\", serif; color:#333333e;">Relationship Between Emissions and Temperature/Natural Disasters for Germany</p>', unsafe_allow_html=True)
+    st.title('Relationship Between Emissions and Temperature/Natural Disasters for Germany')
     st.write("The Mean and Standard Deviation of CO₂ Emissions and Temperature")
     col1, col2, col3, col4 = st.columns(4)
     col1.metric("Emissions Mean", "716447")

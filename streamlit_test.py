@@ -84,15 +84,15 @@ st.markdown("""
     """, unsafe_allow_html=True)
 
 if "page" not in st.session_state:
-    st.session_state.page = "b1"  # 默认显示第1页
+    st.session_state.page = "b0"  
 if "country_selected" not in st.session_state:
     st.session_state.country_selected = "USA"
 
 def set_page(p):
     st.session_state.page = p
 
-# ---- 侧边栏导航 ----
 st.sidebar.title("Navigation")
+st.sidebar.button("Introduction", on_click=set_page, args=("b0",))
 st.sidebar.button("CO₂ Emissions per Year Over Time", on_click=set_page, args=("b1",))
 st.sidebar.button("Top 10 Emissions-producing Countries", on_click=set_page, args=("b2",))
 st.sidebar.button("Tile Plot of the Top 10 CO₂ Emission-producing Countries", on_click=set_page, args=("b3",))
@@ -103,7 +103,13 @@ st.sidebar.button("Emissions&Temperature/Natural Disasters (Germany)", on_click=
 # ---- 渲染页面 ----
 page = st.session_state.page
 
-if page == "b1":
+if page=="b0":
+    st.title("Project Dashboard")
+    st.write("Main outputs of both individual project and group project are demonstrated in this dashboard.")
+    st.write("Please select a module from the sidebar on the left.")
+
+elif page == "b1":
+    st.title("Country CO₂ Emissions per Year Over Time")
     st.markdown(
         '<p style="font-size:20px; font-family:\'Times New Roman\', serif; color:#333333;">'
         '1. Country CO₂ Emissions per Year Over Time'
@@ -319,6 +325,5 @@ elif page=="b6":
     plt.ylabel('Scaled Temperature (Fahrenheit)', fontsize=12)
     plt.grid(alpha=0.3)
     st.pyplot(plt)
-else: 
-    st.write("Select a module on the left first.")
+else: None
     

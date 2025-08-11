@@ -312,5 +312,20 @@ elif page=="b6":
     plt.ylabel('Scaled Temperature (Fahrenheit)', fontsize=12)
     plt.grid(alpha=0.3)
     st.pyplot(plt)
+     st.write("The Correlation Coefficient for CO₂ Emissions and Each Type of Natural Disaster")
+    corrs = {}
+    gm=co2[(co2['Country']=='Germany')&(co2['Year'].between(1900,2024))]
+    codi=pd.merge(disaster,gm,on='Year',how='inner')
+    for col in disaster.columns[1:]: 
+        corrs[col] = codi['Value'].corr(codi[col], method='pearson')
+    cor=pd.DataFrame(list(corrs.items()), columns=['Disaster Type', 'Correlation with $\mathrm{CO}_2$ Emissions'])
+    plt.figure(figsize=(12,6))
+    plt.barh(cor['Disaster Type'],cor['Correlation with $\mathrm{CO}_2$ Emissions'], color=colors)
+    plt.title('Correlation between $\mathrm{CO}_2$ Emissions and Disaster Types', fontsize=14)
+    plt.xlabel('Correlation with $\mathrm{CO}_2$', fontsize=12)
+    plt.ylabel('Disaster Type', fontsize=12)
+    plt.grid(alpha=0.3)
+    plt.tight_layout()
+    st.pyplot(plt)
 else: None
     

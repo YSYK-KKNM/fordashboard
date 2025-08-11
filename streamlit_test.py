@@ -270,7 +270,7 @@ elif page=="b5":
     plt.figure(figsize=(12, 6))
     plt.scatter(df['sc_emissions'], df['sc_temperature'], label='Standardized CO₂ Emissions', color='black', alpha=0.8)
     plt.plot(df['sc_emissions'], y_sc, color='blue', linewidth=2)
-    plt.title('Germany $\mathrm{CO}_2$ Emissions and Temperature (1980-2024)', fontsize=16)
+    plt.title('Us $\mathrm{CO}_2$ Emissions and Temperature (1980-2014)', fontsize=16)
     plt.xlabel('Scaled Emissions (Metric Tonnes)', fontsize=12)
     plt.ylabel('Scaled Temperature (Fahrenheit)', fontsize=12)
     plt.grid(alpha=0.3)    

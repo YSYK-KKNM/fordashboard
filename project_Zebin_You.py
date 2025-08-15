@@ -7,15 +7,12 @@ import numpy as np
 from sklearn.preprocessing import StandardScaler
 import statsmodels.api as sm
 import seaborn as sns
-
-@st.cache_data
 co2=pd.read_excel('https://raw.githubusercontent.com/YSYK-KKNM/groupproject/main/yearly_co2_emissions_1000_tonnes1.xlsx')
 gdp=pd.read_excel('https://raw.githubusercontent.com/YSYK-KKNM/groupproject/main/GDP_growth.xlsx', skiprows=3)
 energy=pd.read_excel('https://raw.githubusercontent.com/YSYK-KKNM/groupproject/main/energy.xlsx', skiprows=3)
 disaster=pd.read_excel('https://raw.githubusercontent.com/YSYK-KKNM/groupproject/main/disaster.xlsx')
 utemperature=pd.read_csv('https://raw.githubusercontent.com/YSYK-KKNM/groupproject/main/temperature.csv', skiprows=4, na_values="-99")
 gtemperature=pd.read_excel('https://raw.githubusercontent.com/YSYK-KKNM/groupproject/main/temperature.xlsx')
-
 
 co2 = co2.melt(id_vars='country', var_name='Year', value_name='Emissions')
 co2.rename(columns={'country': 'Country'}, inplace=True)

@@ -1,6 +1,5 @@
 import streamlit as st
 import pandas as pd
-import openpyxl
 import matplotlib.pyplot as plt
 import matplotlib.cm as cm
 import numpy as np
